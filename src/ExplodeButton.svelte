@@ -1,13 +1,10 @@
 <!-- Thank you to this codepen https://codepen.io/jkantner/pen/oNjjEaJ by Jon Kantner -->
 <script>
-  import { onMount } from "svelte";
   export let buttonLabel = "MINT";
   export let onClick = () => {
     console.log("Minting NFT...");
   };
   export let disabled;
-
-  console.log(disabled);
 
   $: {
     if (!disabled) {

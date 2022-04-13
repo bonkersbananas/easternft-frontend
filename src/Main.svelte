@@ -4,6 +4,7 @@
   import Box from "./Box.svelte";
   import ExplodeButton from "./ExplodeButton.svelte";
   import Fireworks from "./Fireworks.svelte";
+  import { CURRENT_NETWORK} from "./settings";
   import { ethers } from "ethers";
   import { onMount } from "svelte";
 
@@ -13,20 +14,20 @@
   let currentAccount;
   let provider;
 
-  const networks = {
-    MAINNET: 137,
-    MUMBAI: 80001,
-  };
-  const CURRENT_NETWORK = networks["MUMBAI"];
-
   const switchNetworkMessage = "💥 Please connect to the Polygon network 💥";
 
   // Guessing we could use something like https://docs.walletconnect.com, uncertain which is concensus atm?
   // for being able to open on a mobile browser without being in the wallet browser first
-  const isCurrentNetwork = (chainId) => chainId == CURRENT_NETWORK;
+
+  const isCurrentNetwork = (chainId) => chainId == CURRENT_NETWORK.chainId;
+
+  function connectToWallet() {
+    provider.send("eth_requestAccounts").then((accounts) => {
+      currentAccount = accounts[0];
+    });
+  }
 
   function handleChainChanged(chainId) {
-    console.log(chainId);
     if (isCurrentNetwork(chainId)) {
       connectToWallet();
       message = "";
@@ -35,12 +36,7 @@
       message = switchNetworkMessage;
     }
   }
-  function connectToWallet() {
-    provider.send("eth_requestAccounts").then((accounts) => {
-      currentAccount = accounts[0];
-    });
-  }
-  
+
   onMount(() => {
     window.ethereum.on("networkChanged", handleChainChanged);
     if (window.ethereum) {
