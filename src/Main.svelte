@@ -1,6 +1,7 @@
 <script>
   import Box from "./Box.svelte";
   import ExplodeButton from "./ExplodeButton.svelte";
+  import { fade } from "svelte/transition";
 
   let isMinting = false;
   let success = false;
@@ -30,11 +31,11 @@
 <main>
   <Box>
     {#if isMinting}
-      <h1>Transaction pending...</h1>
+      <h1 in:fade>Transaction pending...</h1>
       <!-- TODO href -->
       <p>See transaction <a href="">https://polygon...</a></p>
     {:else if success}
-      <h1>CONGRATS 🎉 🍾</h1>
+      <h1 in:fade>CONGRATS 🎉 🍾</h1>
       <p>You have minted 1 Easter NFT!</p>
     {:else}
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
