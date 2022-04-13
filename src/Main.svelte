@@ -8,29 +8,49 @@
   import { onMount } from "svelte";
 
   let isMinting = false;
+  let message = "";
   let success = false;
   let currentAccount;
+  let provider;
 
-  // Guessing we'll use something like https://docs.walletconnect.com, uncertain which is concensus atm?
+  const networks = {
+    MAINNET: 137,
+    MUMBAI: 80001,
+  };
+  const CURRENT_NETWORK = networks["MUMBAI"];
 
-  // NOTE: leaving as certain functions aren't available through AlchemyProvider api
-  // const url =
-  //   `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}/`;
-  // const provider = new ethers.providers.JsonRpcProvider(url);
-  const provider = new ethers.providers.AlchemyProvider(
-    "maticmum",
-    process.env.ALCHEMY_MUMBAI_API_KEY
-  );
+  const switchNetworkMessage = "💥 Please connect to the Polygon network 💥";
 
-  // Logging to play with in console
-  console.log(provider);
+  // Guessing we could use something like https://docs.walletconnect.com, uncertain which is concensus atm?
+  // for being able to open on a mobile browser without being in the wallet browser first
+  const isCurrentNetwork = (chainId) => chainId == CURRENT_NETWORK;
 
+  function handleChainChanged(chainId) {
+    console.log(chainId);
+    if (isCurrentNetwork(chainId)) {
+      connectToWallet();
+      message = "";
+    } else {
+      currentAccount = null;
+      message = switchNetworkMessage;
+    }
+  }
+  function connectToWallet() {
+    provider.send("eth_requestAccounts").then((accounts) => {
+      currentAccount = accounts[0];
+    });
+  }
+  
   onMount(() => {
-    // This'll just work for metamask, also I assumed we'd be able to connect with
-    // alchemy provider... which isn't working the way I expected
+    window.ethereum.on("networkChanged", handleChainChanged);
     if (window.ethereum) {
-      window.ethereum.send("eth_requestAccounts", []).then((data) => {
-        currentAccount = data.result[0];
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      provider.getNetwork().then((network) => {
+        if (!isCurrentNetwork(network.chainId)) {
+          message = switchNetworkMessage;
+        } else {
+          connectToWallet();
+        }
       });
     }
   });
@@ -58,6 +78,7 @@
   {#if currentAccount}
     <Address>{currentAccount}</Address>
   {/if}
+  <p class="info">{message}</p>
   <Box>
     {#if isMinting}
       <h1 in:fade>Transaction pending...</h1>
@@ -70,7 +91,7 @@
     {:else}
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
       <p>Each NFT costs only x MATIC, but you can only have 100 🙀</p>
-      <ExplodeButton {onClick} />
+      <ExplodeButton {onClick} disabled={!currentAccount} />
     {/if}
   </Box>
 </main>
@@ -94,6 +115,7 @@
 
   main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -127,5 +149,9 @@
     font-size: 1.5em;
     font-weight: 100;
     font-family: monospace;
+  }
+
+  .info {
+    color: red;
   }
 </style>

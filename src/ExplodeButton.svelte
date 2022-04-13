@@ -5,12 +5,15 @@
   export let onClick = () => {
     console.log("Minting NFT...");
   };
+  export let disabled;
 
-  let button;
+  console.log(disabled);
 
-  onMount(() => {
-    button = new ExplosiveButton("button");
-  });
+  $: {
+    if (!disabled) {
+      new ExplosiveButton("button");
+    }
+  }
 
   class ExplosiveButton {
     constructor(el) {
@@ -138,7 +141,7 @@
         delay: delay,
       });
       animation.onfinish = () => {
-        onClick()
+        onClick();
         el.remove();
       };
     }
@@ -249,7 +252,7 @@
   }
 </script>
 
-<button bind:this={button}> {buttonLabel} </button>
+<button {disabled}> {buttonLabel} </button>
 
 <style>
   button {
@@ -263,5 +266,9 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+  }
+  button[disabled] {
+    opacity: 0.5;
+    cursor: default;
   }
 </style>
