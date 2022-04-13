@@ -1,10 +1,39 @@
 <script>
+  import { fade } from "svelte/transition";
+  import Address from "./Address.svelte";
   import Box from "./Box.svelte";
   import ExplodeButton from "./ExplodeButton.svelte";
-  import { fade } from "svelte/transition";
+  import Fireworks from "./Fireworks.svelte";
+  import { ethers } from "ethers";
+  import { onMount } from "svelte";
 
   let isMinting = false;
   let success = false;
+  let currentAccount;
+
+  // Guessing we'll use something like https://docs.walletconnect.com, uncertain which is concensus atm?
+
+  // NOTE: leaving as certain functions aren't available through AlchemyProvider api
+  // const url =
+  //   `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}/`;
+  // const provider = new ethers.providers.JsonRpcProvider(url);
+  const provider = new ethers.providers.AlchemyProvider(
+    "maticmum",
+    process.env.ALCHEMY_MUMBAI_API_KEY
+  );
+
+  // Logging to play with in console
+  console.log(provider);
+
+  onMount(() => {
+    // This'll just work for metamask, also I assumed we'd be able to connect with
+    // alchemy provider... which isn't working the way I expected
+    if (window.ethereum) {
+      window.ethereum.send("eth_requestAccounts", []).then((data) => {
+        currentAccount = data.result[0];
+      });
+    }
+  });
 
   // TODO connect mint
   async function mint() {
@@ -12,9 +41,6 @@
       setTimeout(() => {
         isMinting = false;
         success = true;
-
-        console.log(isMinting);
-        console.log(success);
         resolve();
       }, 3000);
     });
@@ -29,12 +55,16 @@
 </script>
 
 <main>
+  {#if currentAccount}
+    <Address>{currentAccount}</Address>
+  {/if}
   <Box>
     {#if isMinting}
       <h1 in:fade>Transaction pending...</h1>
       <!-- TODO href -->
       <p>See transaction <a href="">https://polygon...</a></p>
     {:else if success}
+      <Fireworks />
       <h1 in:fade>CONGRATS 🎉 🍾</h1>
       <p>You have minted 1 Easter NFT!</p>
     {:else}
@@ -77,6 +107,16 @@
     font-size: 3em;
     font-weight: 100;
   }
+
+  /* NOTE: Gradient text, leaving as potential funky alternative
+  h1 span {
+    background-image: linear-gradient(to left, #f7797d, #e4ac28, #f7797d);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+  } */
 
   b {
     color: black;
