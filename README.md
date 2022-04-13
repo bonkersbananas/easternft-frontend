@@ -9,8 +9,11 @@
 The code is in UI stage where it hasn't been connected to the contract, yet.
 
 [ ] Replace `mint()` in `Main.svelte` with contract mint.
+
 [ ] Replace link in second step with actual polygon link.
+
 [ ] Some sort of error handling depending on what `mint()` returns?
+
 [ ] Maybe set github pages to `public/build` so peeps can give feedback?
 
 ## Get started
