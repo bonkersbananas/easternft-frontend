@@ -64,11 +64,11 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
-		replace({
-			include: ["src/**/*.svelte"],
-			preventAssignment: true,
-			values: configToReplace
-		  }),
+		// replace({
+		// 	include: ["src/**/*.svelte"],
+		// 	preventAssignment: true,
+		// 	values: configToReplace
+		//   }),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

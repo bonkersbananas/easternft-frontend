@@ -31,10 +31,14 @@
 
   wrongNetwork.subscribe((value) => {
     if (value) {
-      message = "❣️ Please connect to the Polygon network ❣️";
+      if (provider.getSigner()) {
+        message = "❣️ Please connect to the Polygon network ❣️";
+      } else {
+        message = "❣️ Please switch to the Polygon network ❣️";
+      }
     } else {
       message = "";
-      connectWallet().then((address) => {
+      !currentAccount && connectWallet().then((address) => {
         currentAccount = address;
       });
     }
