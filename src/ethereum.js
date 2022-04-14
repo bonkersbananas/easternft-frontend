@@ -1,12 +1,16 @@
 import { ethers } from "ethers";
 import { CURRENT_NETWORK } from "./settings";
-import { connected, wrongNetwork } from "./stores";
+import { address, connected, wrongNetwork } from "./stores";
 import NFT from "./NFT";
 
 export const provider =
   window.ethereum && new ethers.providers.Web3Provider(window.ethereum);
 
-let contract;
+let contract = new ethers.Contract(
+  CURRENT_NETWORK.contractAddress,
+  NFT.abi,
+  provider
+);
 
 const isCurrentNetwork = (chainId) => chainId == CURRENT_NETWORK.chainId;
 
@@ -20,24 +24,33 @@ function setContract() {
   connected.set(true);
 }
 
+export async function init() {
+  const accounts = await provider.send("eth_accounts");
+  const network = await provider.getNetwork();
+  if (accounts.length) {
+    address.set(accounts[0]);
+  }
+  if (!isCurrentNetwork(network.chainId)) {
+    wrongNetwork.set(true);
+    connected.set(true);
+  } else if (accounts.length) {
+    setContract();
+  }
+}
+
 export async function connectWallet() {
   const network = await provider.getNetwork();
   if (isCurrentNetwork(network.chainId)) {
     const accounts = await provider.send("eth_requestAccounts");
     setContract();
-    return accounts[0];
+    address.set(accounts[0]);
+  } else {
+    wrongNetwork.set(true);
   }
-  wrongNetwork.set(true);
-  return null;
 }
 
 export function handleChainChanged(chainId) {
-  if (isCurrentNetwork(chainId)) {
-    wrongNetwork.set(false);
-  } else {
-    connected.set(false);
-    wrongNetwork.set(true);
-  }
+  wrongNetwork.set(!isCurrentNetwork(chainId));
 }
 
 export async function getPrice() {

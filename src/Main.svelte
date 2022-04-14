@@ -4,6 +4,7 @@
   import Address from "./Address.svelte";
   import Box from "./Box.svelte";
   import ExplodeButton from "./ExplodeButton.svelte";
+  import Button from "./Button.svelte";
   import Fireworks from "./Fireworks.svelte";
   import {
     connectWallet,
@@ -11,44 +12,50 @@
     getPrice,
     mint,
     provider,
+    init,
   } from "./ethereum";
-  import { connected, wrongNetwork } from "./stores";
+  import { address, connected, wrongNetwork } from "./stores";
 
   let isMinting = false;
   let message = "";
   let success = false;
   let currentAccount;
-  let price = "x";
+  let price = "1";
   let transactionHash = "";
+  let isConnected;
 
   onMount(() => {
     if (!provider) {
       message = "❣️ Please change to web3 browser ❣️";
     } else {
-      window.ethereum.on("networkChanged", handleChainChanged);
+      window.ethereum.on("chainChanged", handleChainChanged);
+      init();
     }
   });
 
   wrongNetwork.subscribe((value) => {
     if (value) {
-      if (provider.getSigner()) {
-        message = "❣️ Please connect to the Polygon network ❣️";
-      } else {
+      if (currentAccount) {
         message = "❣️ Please switch to the Polygon network ❣️";
+      } else {
+        message = "❣️ Please connect to the Polygon network ❣️";
       }
     } else {
       message = "";
-      !currentAccount && connectWallet().then((address) => {
-        currentAccount = address;
-      });
     }
   });
+
   connected.subscribe((value) => {
+    isConnected = value;
     if (value) {
       getPrice().then((value) => {
         price = value;
       });
     }
+  });
+
+  address.subscribe((value) => {
+    currentAccount = value;
   });
 
   let onClick = async () => {
@@ -62,9 +69,8 @@
         isMinting = false;
         success = true;
       } catch (e) {
-        console.log(e);
-        message = "❣️ An error occurred. Reload page to try again ❣️";
         isMinting = false;
+        message = "❣️ An error occurred. Reload page to try again ❣️";
       }
     }
   };
@@ -91,8 +97,10 @@
     {:else}
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
       <p>Each NFT costs only {price} MATIC, grab 'em! 🙀</p>
-      {#if !message}
-        <ExplodeButton {onClick} disabled={!currentAccount} />
+      {#if isConnected && !message}
+        <ExplodeButton {onClick} />
+      {:else if !message}
+        <Button onClick={connectWallet}>Connect</Button>
       {/if}
     {/if}
     <p class="info">{message}</p>

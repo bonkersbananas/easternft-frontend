@@ -1,16 +1,16 @@
 <!-- Thank you to this codepen https://codepen.io/jkantner/pen/oNjjEaJ by Jon Kantner -->
 <script>
+import { onMount } from "svelte";
+
+  import Button from "./Button.svelte";
   export let buttonLabel = "MINT";
   export let onClick = () => {
     console.log("Minting NFT...");
   };
-  export let disabled;
 
-  $: {
-    if (!disabled) {
-      new ExplosiveButton("button");
-    }
-  }
+  onMount(() => {
+    new ExplosiveButton("button")
+  })
 
   class ExplosiveButton {
     constructor(el) {
@@ -249,23 +249,5 @@
   }
 </script>
 
-<button {disabled}> {buttonLabel} </button>
+<Button> {buttonLabel} </Button>
 
-<style>
-  button {
-    font-size: 1.5em;
-    font-weight: 300;
-    max-height: 5rem;
-    max-width: 300px;
-    padding: 1em;
-    background: red;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button[disabled] {
-    opacity: 0.5;
-    cursor: default;
-  }
-</style>
