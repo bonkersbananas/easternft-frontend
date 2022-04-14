@@ -8,6 +8,7 @@
   import Info from "./Info.svelte";
   import Button from "./Button.svelte";
   import Fireworks from "./Fireworks.svelte";
+  import TotalMinted from "./TotalMinted.svelte";
   import {
     connectWallet,
     handleChainChanged,
@@ -31,7 +32,11 @@
       message = "❣️ Please change to web3 browser ❣️";
     } else {
       window.ethereum.on("chainChanged", handleChainChanged);
-      init();
+      init().then((mintedOut) => {
+        if (mintedOut) {
+          message = "❣️ The drop has minted out! ❣️";
+        }
+      });
     }
   });
 
@@ -50,9 +55,11 @@
   connected.subscribe((value) => {
     isConnected = value;
     if (value) {
-      getPrice().then((value) => {
-        price = value;
-      });
+      getPrice()
+        .then((value) => {
+          price = value;
+        })
+        .catch(() => {});
     }
   });
 
@@ -82,12 +89,16 @@
   {#if currentAccount}
     <Address>{currentAccount}</Address>
   {/if}
+  <h2>Happy ETHster & <br /> Welcome to the ETHster hunt!</h2>
   <Box>
     {#if isMinting}
       <h1 in:fade>Transaction pending...</h1>
       {#if transactionHash}
         <p>
-          <a href="https://polygonscan.com/tx/{transactionHash}"
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://polygonscan.com/tx/{transactionHash}"
             >See transaction</a
           >
         </p>
@@ -99,10 +110,13 @@
     {:else}
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
       <p>Each NFT costs only {price} MATIC, grab 'em! 🙀</p>
-      {#if isConnected && !message}
-        <ExplodeButton {onClick} />
-      {:else if !message}
-        <Button onClick={connectWallet}>Connect</Button>
+      {#if !message}
+        {#if isConnected}
+          <ExplodeButton {onClick} />
+          <TotalMinted />
+        {:else}
+          <Button onClick={connectWallet}>Connect</Button>
+        {/if}
       {/if}
     {/if}
     <p class="info">{message}</p>
@@ -138,21 +152,15 @@
 
   h1 {
     color: #f7797d;
-    /* text-transform: uppercase; */
     font-size: 3em;
     font-weight: 600;
     font-family: "Poppins", Georgia, Times, serif;
   }
 
-  /* NOTE: Gradient text, leaving as potential funky alternative
-  h1 span {
-    background-image: linear-gradient(to left, #f7797d, #e4ac28, #f7797d);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
-  } */
+  h2 {
+    margin-top: 4rem;
+    text-align: center;
+  }
 
   b {
     color: black;

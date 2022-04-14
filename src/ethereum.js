@@ -35,6 +35,7 @@ export async function init() {
     connected.set(true);
   } else if (accounts.length) {
     setContract();
+    return await mintDone();
   }
 }
 
@@ -62,4 +63,16 @@ export async function mint() {
   const price = await contract.getPrice();
   const tx = await contract.mint({ value: price });
   return tx;
+}
+
+export async function mintDone() {
+  const totalMinted = await contract.totalMinted();
+  const totalSupply = await contract.maxSupply();
+  return totalMinted === totalSupply
+}
+
+export async function getTotalMintedFraction() {
+  const totalMinted = await contract.totalMinted();
+  const totalSupply = await contract.maxSupply();
+  return `${parseInt(totalMinted)} / ${parseInt(totalSupply)}`;
 }

@@ -15,7 +15,7 @@
       max-height: 5rem;
       max-width: 300px;
       padding: 1em;
-      background: red;
+      background: #f7797d;
       color: #fff;
       border: none;
       border-radius: 5px;

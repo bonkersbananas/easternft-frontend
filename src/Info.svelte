@@ -1,7 +1,5 @@
 <div>
   <article>
-    <h2>Happy ETHster and welcome to the ETHster hunt <br> by Bankless.se!</h2>
-
     <p>There are four different ETHster NFTs that you can mint. 🙂</p>
     <p>
       If you collect three out of the four you will be eligible to claim the
@@ -33,7 +31,7 @@
       reward shortly! Happy Hunting!
     </p>
 
-    <b>//Bankless.se team</b>
+    <b>Good luck /Bankless.se</b>
   </article>
 </div>
 
@@ -53,8 +51,8 @@
     padding: 2rem;
     max-width: 700px;
   }
-  h2 {
-    text-align: center;
+  a {
+    color: #f7797d;
   }
   li {
     padding: 0.2em;
