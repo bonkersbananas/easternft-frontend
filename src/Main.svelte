@@ -25,7 +25,6 @@
   let currentAccount;
   let price = "1";
   let transactionHash = "";
-  let isConnected;
 
   onMount(() => {
     if (!provider) {
@@ -53,7 +52,6 @@
   });
 
   connected.subscribe((value) => {
-    isConnected = value;
     if (value) {
       getPrice()
         .then((value) => {
@@ -111,7 +109,7 @@
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
       <p>Each NFT costs only {price} MATIC, grab 'em! 🙀</p>
       {#if !message}
-        {#if isConnected}
+        {#if currentAccount}
           <ExplodeButton {onClick} />
           <TotalMinted />
         {:else}
