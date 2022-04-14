@@ -26,7 +26,8 @@
     }
 
     :global(section.box h1) {
-      font-size: 2.5em;
+      font-size: 2.6em;
+      line-height: 0.9;
     }
   }
 </style>

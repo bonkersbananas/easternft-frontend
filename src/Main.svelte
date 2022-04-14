@@ -3,7 +3,9 @@
   import { fade } from "svelte/transition";
   import Address from "./Address.svelte";
   import Box from "./Box.svelte";
+  import Chicken from "./Chicken.svelte";
   import ExplodeButton from "./ExplodeButton.svelte";
+  import Info from "./Info.svelte";
   import Button from "./Button.svelte";
   import Fireworks from "./Fireworks.svelte";
   import {
@@ -105,6 +107,8 @@
     {/if}
     <p class="info">{message}</p>
   </Box>
+  <Info />
+  <Chicken />
 </main>
 
 <style>
@@ -129,16 +133,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    padding: 1em;
-    margin: 0 auto;
+    min-height: 100vh;
   }
 
   h1 {
-    color: red;
-    text-transform: uppercase;
+    color: #f7797d;
+    /* text-transform: uppercase; */
     font-size: 3em;
-    font-weight: 100;
+    font-weight: 600;
+    font-family: "Poppins", Georgia, Times, serif;
   }
 
   /* NOTE: Gradient text, leaving as potential funky alternative
@@ -154,6 +157,7 @@
   b {
     color: black;
     text-decoration: underline red;
+    text-transform: uppercase;
   }
 
   p {
@@ -163,6 +167,6 @@
   }
 
   .info {
-    color: red;
+    color: #f7797d;
   }
 </style>

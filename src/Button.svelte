@@ -20,6 +20,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     }
     button[disabled] {
       opacity: 0.5;
