@@ -21,9 +21,17 @@
   let price = "x";
   let transactionHash = "";
 
+  onMount(() => {
+    if (!provider) {
+      message = "❣️ Please change to web3 browser ❣️";
+    } else {
+      window.ethereum.on("networkChanged", handleChainChanged);
+    }
+  });
+
   wrongNetwork.subscribe((value) => {
     if (value) {
-      message = "💥 Please connect to the Polygon network 💥";
+      message = "❣️ Please connect to the Polygon network ❣️";
     } else {
       message = "";
       connectWallet().then((address) => {
@@ -39,22 +47,21 @@
     }
   });
 
-  onMount(() => {
-    if (!provider) {
-      message = "💥 Please change to web3 browser 💥";
-    } else {
-      window.ethereum.on("networkChanged", handleChainChanged);
-    }
-  });
-
   let onClick = async () => {
     if (!isMinting) {
       isMinting = true;
-      const tx = await mint();
-      transactionHash = tx.hash;
-      await tx.wait();
-      isMinting = false;
-      success = true;
+      let tx;
+      try {
+        tx = await mint();
+        transactionHash = tx.hash;
+        await tx.wait();
+        isMinting = false;
+        success = true;
+      } catch (e) {
+        console.log(e);
+        message = "❣️ An error occurred. Reload page to try again ❣️";
+        isMinting = false;
+      }
     }
   };
 </script>
@@ -63,7 +70,6 @@
   {#if currentAccount}
     <Address>{currentAccount}</Address>
   {/if}
-  <p class="info">{message}</p>
   <Box>
     {#if isMinting}
       <h1 in:fade>Transaction pending...</h1>
@@ -81,8 +87,11 @@
     {:else}
       <h1>Mint <b>Bankless.se</b> Easter NFT 🐣</h1>
       <p>Each NFT costs only {price} MATIC, grab 'em! 🙀</p>
-      <ExplodeButton {onClick} disabled={!currentAccount} />
+      {#if !message}
+        <ExplodeButton {onClick} disabled={!currentAccount} />
+      {/if}
     {/if}
+    <p class="info">{message}</p>
   </Box>
 </main>
 
