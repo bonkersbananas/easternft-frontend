@@ -9,4 +9,10 @@
         padding: 0em 1em;
         border-radius: 10px;
     }
+
+    @media (max-width: 640px) {
+        p {
+            font-size: 0.8em;
+        }
+    }
 </style>
