@@ -1588,24 +1588,24 @@ var app = (function () {
     			add_location(p1, file$3, 3, 4, 93);
     			add_location(p2, file$3, 7, 4, 220);
     			attr_dev(a, "href", "https://discord.gg/2uKk7hpu4B");
-    			attr_dev(a, "class", "svelte-1q4o1tt");
+    			attr_dev(a, "class", "svelte-9m9yhn");
     			add_location(a, file$3, 11, 8, 341);
-    			attr_dev(li0, "class", "svelte-1q4o1tt");
+    			attr_dev(li0, "class", "svelte-9m9yhn");
     			add_location(li0, file$3, 9, 6, 301);
     			add_location(code, file$3, 16, 8, 525);
-    			attr_dev(li1, "class", "svelte-1q4o1tt");
+    			attr_dev(li1, "class", "svelte-9m9yhn");
     			add_location(li1, file$3, 14, 6, 442);
-    			attr_dev(li2, "class", "svelte-1q4o1tt");
+    			attr_dev(li2, "class", "svelte-9m9yhn");
     			add_location(li2, file$3, 18, 6, 582);
-    			attr_dev(li3, "class", "svelte-1q4o1tt");
+    			attr_dev(li3, "class", "svelte-9m9yhn");
     			add_location(li3, file$3, 22, 6, 697);
     			add_location(ol, file$3, 8, 4, 290);
     			add_location(p3, file$3, 27, 4, 819);
     			add_location(p4, file$3, 28, 4, 848);
     			add_location(b, file$3, 33, 4, 983);
-    			attr_dev(article, "class", "svelte-1q4o1tt");
+    			attr_dev(article, "class", "svelte-9m9yhn");
     			add_location(article, file$3, 1, 2, 8);
-    			attr_dev(div, "class", "svelte-1q4o1tt");
+    			attr_dev(div, "class", "svelte-9m9yhn");
     			add_location(div, file$3, 0, 0, 0);
     		},
     		l: function claim(nodes) {

@@ -41,9 +41,10 @@
     margin-top: 2em;
     padding: 0;
     width: 100%;
+    border-radius: 20px;
     font-family: "Poppins", Georgia, Times, serif;
     /* Semi transparent white background */
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.75);
     display: flex;
     justify-content: center;
   }
